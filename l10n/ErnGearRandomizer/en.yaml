@@ -16,6 +16,12 @@ enchanted_name: "Randomize Enchanted Items"
 enchanted_description: "Only normal items are eligible unless you enable this."
 
 
+itemBan_name: "Banned Item Pattern"
+itemBan_description: "Additional pattern for banned item IDs. Items matching this pattern will be excluded from randomization."
+
+classBan_name: "Banned Class Pattern"
+classBan_description: "Additional pattern for banned class IDs. NPCs with a class matching this pattern will not be randomized."
+
 extraRandom_name: "Extra Random"
 extraRandom_description: "Don't try to just replace items with similar items. This is not aesthetically pleasing and will disrupt the game economy. Save and reload your game right after you change this."
 

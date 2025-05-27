@@ -47,9 +47,14 @@ local function extraRandom()
     return S.settingsStore:get("extraRandom")
 end
 
+local function itemBan()
+    return S.settingsStore:get("itemBan")
+end
+
 local function lookupTable()
     return storage.globalSection(S.MOD_NAME .. "_swap_tables")
 end
+
 
 armorWeightSplit = {
     -- just take the heaviest light armor's weight
@@ -150,6 +155,9 @@ local function filter(record)
         return false
     end
     if string.find(string.lower(record.id), ".*curse.*") ~= nil then
+        return false
+    end
+    if itemBan() ~= "" and string.find(string.lower(record.id), itemBan()) ~= nil then
         return false
     end
 

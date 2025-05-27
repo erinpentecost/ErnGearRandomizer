@@ -87,6 +87,20 @@ local function initSettings()
                 renderer = "checkbox"
             },
             {
+                key = 'itemBan',
+                name = 'Banned Item Pattern',
+                description = 'Additional pattern for banned item IDs.',
+                default = 'indoril helmet',
+                renderer = 'textLine',
+            },
+            {
+                key = 'classBan',
+                name = 'Banned Class Pattern',
+                description = 'Additional pattern for banned class IDs.',
+                default = 'guard',
+                renderer = 'textLine',
+            },
+            {
                 key = "debugMode",
                 name = "debugMode_name",
                 default = false,

@@ -34,3 +34,14 @@ You can change the settings for the mod in-game.
 * Enable/Disable weapon swaps.
 * Enable/Disable enchanted item swaps.
 * Enable/Disable similar-item swap restrictions.
+* Exclude classes of NPCs by [pattern](http://lua-users.org/wiki/PatternsTutorial).
+* Exclude additional items by [pattern](http://lua-users.org/wiki/PatternsTutorial).
+
+
+## Contributing
+
+Feel free to submit a PR to the [repo](https://github.com/erinpentecost/ErnGearRandomizer) provided:
+
+* You assert that all code submitted is your own work.
+* You relinquish ownership of the code upon merge to `main`.
+* You acknowledge your code will be governed by the project license.

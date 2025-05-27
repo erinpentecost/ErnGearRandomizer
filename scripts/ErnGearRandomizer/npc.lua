@@ -24,6 +24,10 @@ local swapTable = require("scripts.ErnGearRandomizer.swaptable")
 
 local swapMarker = storage.globalSection(S.MOD_NAME .. "SwapMarker")
 
+local function classBan()
+    return S.settingsStore:get("classBan")
+end
+
 local function swapItems(npc)
     -- https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_types.html##(Actor)
     equipmentSlotToItem = T.Actor.getEquipment(npc)
@@ -83,6 +87,10 @@ local function onActive()
     if record.isEssential then
         S.debugPrint("npc record " .. record.id .. " is essential, won't swap")
         return
+    end
+    if classBan() ~= "" and string.find(string.lower(record.class), classBan()) ~= nil then
+        S.debugPrint("npc record " .. record.id .. " has a banned class " .. classBan())
+        return false
     end
 
     swapItems(self)
