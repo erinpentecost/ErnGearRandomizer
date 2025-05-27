@@ -2,7 +2,7 @@ name: "ErnGearRandomizer"
 description: "Randomly mix up clothing, armor, and weapons on NPCs. This can be used to get a better distribution of expansion and mod items on NPCs."
 
 modSettingsTitle: "Mod Options"
-modSettingsDesc: "Things you can enable or disable. Well, only one thing."
+modSettingsDesc: "Change how the mod works. After you make a change, you MUST RELOAD your game."
 
 
 chance_name: "Randomize Chance Percent"
@@ -23,7 +23,7 @@ classBan_name: "Banned Class Pattern"
 classBan_description: "Additional pattern for banned class IDs. NPCs with a class matching this pattern will not be randomized."
 
 extraRandom_name: "Extra Random"
-extraRandom_description: "Don't try to just replace items with similar items. This is not aesthetically pleasing and will disrupt the game economy. Save and reload your game right after you change this."
+extraRandom_description: "Don't try to just replace items with similar items. This is not aesthetically pleasing and will disrupt the game economy."
 
 
 debugMode_name: "Print Debug Messages to the Console"
