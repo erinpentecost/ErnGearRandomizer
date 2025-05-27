@@ -1,0 +1,3 @@
+GLOBAL:scripts/ErnGearRandomizer/global.lua
+NPC:scripts/ErnGearRandomizer/npc.lua
+PLAYER:scripts/ErnGearRandomizer/player.lua

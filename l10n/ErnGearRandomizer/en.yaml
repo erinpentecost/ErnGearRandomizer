@@ -1,0 +1,17 @@
+name: "ErnGearRandomizer"
+description: "Randomly mix up clothing, armor, and weapons on NPCs. This can be used to get a better distribution of expansion and mod items on NPCs."
+
+modSettingsTitle: "Mod Options"
+modSettingsDesc: "Things you can enable or disable. Well, only one thing."
+
+
+chance_name: "Randomize Chance Percent"
+chance_description: "The probability of swapping out any single item on an NPC."
+
+clothes_name: "Randomize Clothing"
+armor_name: "Randomize Armor"
+weapons_name: "Randomize Weapons"
+enchanted_name: "Randomize Enchanted Items"
+enchanted_description: "Only normal items are eligible unless you enable this."
+
+debugMode_name: "Print Debug Messages to the Console"
