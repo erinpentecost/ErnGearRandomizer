@@ -90,14 +90,14 @@ local function initSettings()
                 key = 'itemBan',
                 name = 'Banned Item Pattern',
                 description = 'Additional pattern for banned item IDs.',
-                default = 'indoril helmet',
+                default = 'indoril.*',
                 renderer = 'textLine',
             },
             {
                 key = 'classBan',
                 name = 'Banned Class Pattern',
                 description = 'Additional pattern for banned class IDs.',
-                default = 'guard',
+                default = '',
                 renderer = 'textLine',
             },
             {

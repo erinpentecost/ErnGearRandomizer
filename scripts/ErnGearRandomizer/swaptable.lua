@@ -15,9 +15,9 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ]]
+
 local core = require("openmw.core")
 local T = require("openmw.types")
-
 local S = require("scripts.ErnGearRandomizer.settings")
 local U = require("scripts.ErnGearRandomizer.uniques")
 
@@ -54,7 +54,6 @@ end
 local function lookupTable()
     return storage.globalSection(S.MOD_NAME .. "_swap_tables")
 end
-
 
 armorWeightSplit = {
     -- just take the heaviest light armor's weight
@@ -166,6 +165,8 @@ end
 
 -- initTables builds the swap tables.
 local function initTables()
+    lookupTable():reset()
+
     S.debugPrint("loading armors tables")
     for i, record in pairs(T.Armor.records) do
         recordID = string.lower(record.id)
@@ -199,6 +200,23 @@ local function initTables()
     lookupTable():setLifeTime(storage.LIFE_TIME.GameSession)
 end
 
+function pickNewRecordFromTable(lookupKey)
+    size = lookupTable():get("COUNT" .. lookupKey)
+    if size == nil then
+        -- we shouldn't get here unless settings changed or
+        -- new item records were created procedurally.
+        S.debugPrint("bad table " .. lookupKey)
+        return nil
+    end
+    if size <= 1 then
+        S.debugPrint("small table " .. lookupKey)
+        return nil
+    end
+
+    randIndex = math.random(1, size)
+    return lookupTable():get(lookupKey)[randIndex]
+end
+
 -- returns record id if replacement needed.
 -- returns nil if no replacement.
 function getArmorRecordID(armorItem)
@@ -218,21 +236,6 @@ function getArmorRecordID(armorItem)
 
     lookupKey = lookupArmorTableName(T.Armor.record(armorItem))
     return pickNewRecordFromTable(lookupKey)
-end
-
-function pickNewRecordFromTable(lookupKey)
-    size = lookupTable():get("COUNT" .. lookupKey)
-    if size == nil then
-        S.debugPrint("bad table " .. lookupKey)
-        return nil
-    end
-    if size <= 1 then
-        S.debugPrint("small table " .. lookupKey)
-        return nil
-    end
-
-    randIndex = math.random(1, size)
-    return lookupTable():get(lookupKey)[randIndex]
 end
 
 -- returns record id if replacement needed.
@@ -270,6 +273,7 @@ function getWeaponRecordID(weaponItem)
     lookupKey = lookupWeaponTableName(T.Weapon.record(weaponItem))
     return pickNewRecordFromTable(lookupKey)
 end
+
 
 return {
     initTables = initTables,
