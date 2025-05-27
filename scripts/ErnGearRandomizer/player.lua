@@ -15,9 +15,8 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ]]
-
 local I = require("openmw.interfaces")
-local S = require('scripts.ErnGearRandomizer.settings')
+local S = require("scripts.ErnGearRandomizer.settings")
 
 I.Settings.registerPage {
     key = S.MOD_NAME,

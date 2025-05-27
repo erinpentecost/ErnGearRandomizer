@@ -15,9 +15,8 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ]]
-
 local I = require("openmw.interfaces")
-local storage = require('openmw.storage')
+local storage = require("openmw.storage")
 
 local MOD_NAME = "ErnGearRandomizer"
 
@@ -35,7 +34,6 @@ local function debugPrint(str, ...)
 end
 
 local function initSettings()
-
     I.Settings.registerGroup {
         key = "SettingsGlobal" .. MOD_NAME,
         l10n = MOD_NAME,
@@ -99,7 +97,6 @@ local function initSettings()
 
     debugPrint("init settings done")
 end
-
 
 return {
     initSettings = initSettings,

@@ -15,16 +15,15 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ]]
-
-local S = require('scripts.ErnGearRandomizer.settings')
-local core = require('openmw.core')
-local T = require('openmw.types')
-local world = require('openmw.world')
-local storage = require('openmw.storage')
-local swapTable = require('scripts.ErnGearRandomizer.swaptable')
+local S = require("scripts.ErnGearRandomizer.settings")
+local core = require("openmw.core")
+local T = require("openmw.types")
+local world = require("openmw.world")
+local storage = require("openmw.storage")
+local swapTable = require("scripts.ErnGearRandomizer.swaptable")
 
 if require("openmw.core").API_REVISION < 62 then
-	error("OpenMW 0.49 or newer is required!")
+    error("OpenMW 0.49 or newer is required!")
 end
 
 -- Init settings first to init storage which is used everywhere
@@ -35,19 +34,17 @@ swapTable.initTables()
 local swapMarker = storage.globalSection(S.MOD_NAME .. "SwapMarker")
 swapMarker:setLifeTime(storage.LIFE_TIME.GameSession)
 
-
 local function swapItem(data)
     actor = data.actor
     oldItem = data.oldItem
     newItemRecordID = data.newItemRecordID
-    S.debugPrint("npc ".. actor.id .. " swapping item " .. oldItem.id .. " to " .. newItemRecordID)
+    S.debugPrint("npc " .. actor.id .. " swapping item " .. oldItem.id .. " to " .. newItemRecordID)
     oldItem:remove()
     inventory = T.Actor.inventory(actor)
     newItemInstance = world.createObject(newItemRecordID)
     newItemInstance:moveInto(inventory)
-    core.sendGlobalEvent('UseItem', {object = newItemInstance, actor = actor, force = true})
+    core.sendGlobalEvent("UseItem", {object = newItemInstance, actor = actor, force = true})
 end
-
 
 local function markAsDone(data)
     actor = data.actor
@@ -61,16 +58,16 @@ local function saveState()
 end
 
 local function loadState(saved)
-	swapMarker:reset(saved)
+    swapMarker:reset(saved)
 end
 
 return {
     eventHandlers = {
         LMswapItem = swapItem,
-        LMmarkAsDone = markAsDone,
+        LMmarkAsDone = markAsDone
     },
     engineHandlers = {
         onSave = saveState,
-		onLoad = loadState,
+        onLoad = loadState
     }
 }

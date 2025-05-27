@@ -15,14 +15,13 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ]]
+local core = require("openmw.core")
+local T = require("openmw.types")
 
-local core = require('openmw.core')
-local T = require('openmw.types')
+local S = require("scripts.ErnGearRandomizer.settings")
+local U = require("scripts.ErnGearRandomizer.uniques")
 
-local S = require('scripts.ErnGearRandomizer.settings')
-local U = require('scripts.ErnGearRandomizer.uniques')
-
-local storage = require('openmw.storage')
+local storage = require("openmw.storage")
 
 local function chance()
     return S.settingsStore:get("chance")
@@ -47,7 +46,6 @@ end
 local function extraRandom()
     return S.settingsStore:get("extraRandom")
 end
-
 
 local function lookupTable()
     return storage.globalSection(S.MOD_NAME .. "_swap_tables")
@@ -88,7 +86,10 @@ local function lookupArmorTableName(record)
     end
 
     -- https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_types.html##(Armor).TYPE
-    return S.MOD_NAME .. "a" .. record.type .. "e" .. quantize(record.enchantCapacity, 2) .. "w" .. weightBucket .. "c" .. quantize(record.value, 4000)
+    return S.MOD_NAME ..
+        "a" ..
+            record.type ..
+                "e" .. quantize(record.enchantCapacity, 2) .. "w" .. weightBucket .. "c" .. quantize(record.value, 4000)
 end
 
 -- lookupClothingTableName returns the lookuptable containing similar clothing.
@@ -97,7 +98,8 @@ local function lookupClothingTableName(record)
         return S.MOD_NAME .. "c" .. record.type
     end
     -- https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_types.html##(Clothing).TYPE
-    return S.MOD_NAME .. "c" .. record.type .. "e" .. quantize(record.enchantCapacity, 2) .. "c" .. quantize(record.value, 20)
+    return S.MOD_NAME ..
+        "c" .. record.type .. "e" .. quantize(record.enchantCapacity, 2) .. "c" .. quantize(record.value, 20)
 end
 
 -- lookupWeaponTableName returns the lookuptable containing similar weapons.
@@ -106,9 +108,9 @@ local function lookupWeaponTableName(record)
         return S.MOD_NAME .. "w" .. record.type
     end
     -- https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_types.html##(Weapon).TYPE
-    return S.MOD_NAME .. "w" .. record.type .. "e" .. quantize(record.enchantCapacity, 2) .. "c" .. quantize(record.value, 10000)
+    return S.MOD_NAME ..
+        "w" .. record.type .. "e" .. quantize(record.enchantCapacity, 2) .. "c" .. quantize(record.value, 10000)
 end
-
 
 local function addToTable(tableKey, recordID)
     if lookupTable():get(tableKey) == nil then
@@ -129,7 +131,7 @@ local function filter(record)
     if U.uniqueID(record.id) == true then
         return false
     end
-    if enchanted() == false and record.enchant ~= nil then 
+    if enchanted() == false and record.enchant ~= nil then
         return false
     end
     if string.find(string.lower(record.id), ".*fake.*") ~= nil then
@@ -205,7 +207,7 @@ function getArmorRecordID(armorItem)
         S.debugPrint("die roll failed")
         return nil
     end
-    
+
     lookupKey = lookupArmorTableName(T.Armor.record(armorItem))
     return pickNewRecordFromTable(lookupKey)
 end
@@ -238,7 +240,7 @@ function getClothingRecordID(clothingItem)
     if chance() < math.random(0, 99) then
         return nil
     end
-    
+
     lookupKey = lookupClothingTableName(T.Clothing.record(clothingItem))
     return pickNewRecordFromTable(lookupKey)
 end
@@ -256,17 +258,14 @@ function getWeaponRecordID(weaponItem)
     if chance() < math.random(0, 99) then
         return nil
     end
-    
+
     lookupKey = lookupWeaponTableName(T.Weapon.record(weaponItem))
     return pickNewRecordFromTable(lookupKey)
 end
-
-
-
 
 return {
     initTables = initTables,
     getArmorRecordID = getArmorRecordID,
     getClothingRecordID = getClothingRecordID,
-    getWeaponRecordID = getWeaponRecordID,
+    getWeaponRecordID = getWeaponRecordID
 }

@@ -15,13 +15,12 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ]]
-
-local core = require('openmw.core')
-local self = require('openmw.self')
-local storage = require('openmw.storage')
-local T = require('openmw.types')
-local S = require('scripts.ErnGearRandomizer.settings')
-local swapTable = require('scripts.ErnGearRandomizer.swaptable')
+local core = require("openmw.core")
+local self = require("openmw.self")
+local storage = require("openmw.storage")
+local T = require("openmw.types")
+local S = require("scripts.ErnGearRandomizer.settings")
+local swapTable = require("scripts.ErnGearRandomizer.swaptable")
 
 local swapMarker = storage.globalSection(S.MOD_NAME .. "SwapMarker")
 
@@ -42,12 +41,12 @@ local function swapItems(npc)
             end
 
             if newSwapRecord then
-                core.sendGlobalEvent('LMswapItem', {actor=npc, oldItem=oldItem, newItemRecordID=newSwapRecord})
+                core.sendGlobalEvent("LMswapItem", {actor = npc, oldItem = oldItem, newItemRecordID = newSwapRecord})
             end
         end
     end
     -- mark swap as done
-    core.sendGlobalEvent('LMmarkAsDone', {actor=npc})
+    core.sendGlobalEvent("LMmarkAsDone", {actor = npc})
 end
 
 local function onActive()
@@ -68,7 +67,7 @@ local function onActive()
         return
     end
 
-    if T.NPC.objectIsInstance(self) == false then 
+    if T.NPC.objectIsInstance(self) == false then
         S.debugPrint("not an instance!")
         return
     end
@@ -89,9 +88,8 @@ local function onActive()
     swapItems(self)
 end
 
-
 return {
     engineHandlers = {
-        onActive = onActive,
+        onActive = onActive
     }
 }
