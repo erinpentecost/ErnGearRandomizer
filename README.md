@@ -8,6 +8,9 @@ Every playthrough will result in different gear for NPCs.
 
 Even though there are safeties in place to not break Vanilla or Expansion quests, it's possible that quests might be harder or broken. Quests provided by mods are susceptible to breaking more.
 
+This is a screenshot of the game when randomization chance is maximized:
+![example](ErnGearRandomizerExample.png)
+
 
 ## Installing
 Extract [main](https://github.com/erinpentecost/ErnGearRandomizer/archive/refs/heads/main.zip) to your `mods/` folder.
@@ -24,3 +27,10 @@ content=ErnGearRandomizer.omwscripts
 ## Configuring
 
 You can change the settings for the mod in-game.
+
+* Randomization chance per item.
+* Enable/Disable clothing swaps.
+* Enable/Disable armor swaps.
+* Enable/Disable weapon swaps.
+* Enable/Disable enchanted item swaps.
+* Enable/Disable similar-item swap restrictions.

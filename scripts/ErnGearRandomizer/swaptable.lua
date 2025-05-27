@@ -1,3 +1,21 @@
+--[[
+ErnGearRandomizer for OpenMW.
+Copyright (C) 2025 Erin Pentecost
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+]]
+
 local core = require('openmw.core')
 local T = require('openmw.types')
 
@@ -26,22 +44,14 @@ local function enchanted()
     return S.settingsStore:get("enchanted")
 end
 
+local function extraRandom()
+    return S.settingsStore:get("extraRandom")
+end
+
 
 local function lookupTable()
     return storage.globalSection(S.MOD_NAME .. "_swap_tables")
 end
-
---# get list of all available armors
---# https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_types.html##(Armor).records
-
-
--- Try changing it line this: :getAll(types.Light)
-
-
--- https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_types.html##(ArmorRecord)
--- https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_types.html##(ClothingRecord)
--- https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_types.html##(WeaponRecord)
-
 
 armorWeightSplit = {
     -- just take the heaviest light armor's weight
@@ -64,6 +74,9 @@ end
 
 -- lookupArmorTableName returns the lookuptable containing similar armors.
 local function lookupArmorTableName(record)
+    if extraRandom() then
+        return S.MOD_NAME .. "a" .. record.type
+    end
     -- include bucketed weight in the table name so we try to pair
     -- armors of similar skills.
     weightBucket = "!"
@@ -80,12 +93,18 @@ end
 
 -- lookupClothingTableName returns the lookuptable containing similar clothing.
 local function lookupClothingTableName(record)
+    if extraRandom() then
+        return S.MOD_NAME .. "c" .. record.type
+    end
     -- https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_types.html##(Clothing).TYPE
     return S.MOD_NAME .. "c" .. record.type .. "e" .. quantize(record.enchantCapacity, 2) .. "c" .. quantize(record.value, 20)
 end
 
 -- lookupWeaponTableName returns the lookuptable containing similar weapons.
 local function lookupWeaponTableName(record)
+    if extraRandom() then
+        return S.MOD_NAME .. "w" .. record.type
+    end
     -- https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_types.html##(Weapon).TYPE
     return S.MOD_NAME .. "w" .. record.type .. "e" .. quantize(record.enchantCapacity, 2) .. "c" .. quantize(record.value, 10000)
 end

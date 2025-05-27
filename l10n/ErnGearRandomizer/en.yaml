@@ -11,7 +11,13 @@ chance_description: "The probability of swapping out any single item on an NPC."
 clothes_name: "Randomize Clothing"
 armor_name: "Randomize Armor"
 weapons_name: "Randomize Weapons"
+
 enchanted_name: "Randomize Enchanted Items"
 enchanted_description: "Only normal items are eligible unless you enable this."
+
+
+extraRandom_name: "Extra Random"
+extraRandom_description: "Don't try to just replace items with similar items. This is not aesthetically pleasing and will disrupt the game economy. Save and reload your game right after you change this."
+
 
 debugMode_name: "Print Debug Messages to the Console"
