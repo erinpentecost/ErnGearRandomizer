@@ -169,10 +169,10 @@ local function meshOk(record)
     return V.fileExists(record.model)
 end
 
-lastUpdateTime = core.getSimulationTime() - 5
+lastUpdateTime =  core.getRealTime() - 5
 -- initTables builds the swap tables.
 local function initTables()
-    now = core.getSimulationTime()
+    now = core.getRealTime()
     if now < 1 + lastUpdateTime then
         return
     end

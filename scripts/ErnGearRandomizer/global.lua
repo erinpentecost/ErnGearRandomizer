@@ -43,7 +43,7 @@ local function swapItem(data)
     inventory = T.Actor.inventory(actor)
     newItemInstance = world.createObject(newItemRecordID)
     newItemInstance:moveInto(inventory)
-    core.sendGlobalEvent("UseItem", {object = newItemInstance, actor = actor, force = true})
+    core.sendGlobalEvent("UseItem", {object = newItemInstance, actor = actor, force = false})
 end
 
 local function markAsDone(data)
