@@ -62,7 +62,7 @@ local function loadState(saved)
 end
 
 local function resetSwapTables(data)
-    print("Settings changed; recalculating swap tables.")
+    S.debugPrint("Settings changed; recalculating swap tables.")
     swapTable.initTables()
 end
 

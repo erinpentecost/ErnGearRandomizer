@@ -163,8 +163,17 @@ local function filter(record)
     return true
 end
 
+
+lastUpdateTime = core.getSimulationTime() - 5
 -- initTables builds the swap tables.
 local function initTables()
+    now = core.getSimulationTime()
+    if now < 1 + lastUpdateTime then
+        return
+    end
+    lastUpdateTime = now
+
+    print("Loading swap tables.")
     lookupTable():reset()
 
     S.debugPrint("loading armors tables")
@@ -195,9 +204,9 @@ local function initTables()
         end
     end
 
-    S.debugPrint("done loading swap tables")
-
     lookupTable():setLifeTime(storage.LIFE_TIME.GameSession)
+
+    print("Done loading swap tables.")
 end
 
 function pickNewRecordFromTable(lookupKey)
