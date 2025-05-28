@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 local core = require("openmw.core")
 local T = require("openmw.types")
+local V = require("openmw.vfs")
 local S = require("scripts.ErnGearRandomizer.settings")
 local U = require("scripts.ErnGearRandomizer.uniques")
 
@@ -163,6 +164,10 @@ local function filter(record)
     return true
 end
 
+local function meshOk(record)
+    -- Use this function so we don't swap items for broken items.
+    return V.fileExists(record.model)
+end
 
 lastUpdateTime = core.getSimulationTime() - 5
 -- initTables builds the swap tables.
@@ -179,8 +184,7 @@ local function initTables()
     S.debugPrint("loading armors tables")
     for i, record in pairs(T.Armor.records) do
         recordID = string.lower(record.id)
-        if filter(record) then
-            -- actual list
+        if filter(record) and meshOk(record) then
             tableKey = lookupArmorTableName(record)
             addToTable(tableKey, recordID)
         end
@@ -189,7 +193,7 @@ local function initTables()
     S.debugPrint("loading clothing tables")
     for i, record in pairs(T.Clothing.records) do
         recordID = string.lower(record.id)
-        if filter(record) then
+        if filter(record) and meshOk(record) then
             tableKey = lookupClothingTableName(record)
             addToTable(tableKey, recordID)
         end
@@ -198,7 +202,7 @@ local function initTables()
     S.debugPrint("loading weapons tables")
     for i, record in pairs(T.Weapon.records) do
         recordID = string.lower(record.id)
-        if filter(record) then
+        if filter(record) and meshOk(record) then
             tableKey = lookupWeaponTableName(record)
             addToTable(tableKey, recordID)
         end
