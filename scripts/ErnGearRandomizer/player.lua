@@ -17,6 +17,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ]]
 local I = require("openmw.interfaces")
 local S = require("scripts.ErnGearRandomizer.settings")
+local async = require('openmw.async')
+local core = require("openmw.core")
 
 I.Settings.registerPage {
     key = S.MOD_NAME,
@@ -24,3 +26,12 @@ I.Settings.registerPage {
     name = "name",
     description = "description"
 }
+
+local function reset(section, key)
+    -- chance doesn't change tables
+    if key ~= "chance" then
+        core.sendGlobalEvent("LMresetSwapTables", {})
+    end
+end
+
+S.settingsStore:subscribe(async:callback(reset))

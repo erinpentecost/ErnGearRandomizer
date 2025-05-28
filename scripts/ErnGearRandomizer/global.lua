@@ -61,10 +61,16 @@ local function loadState(saved)
     swapMarker:reset(saved)
 end
 
+local function resetSwapTables(data)
+    print("Settings changed; recalculating swap tables.")
+    swapTable.initTables()
+end
+
 return {
     eventHandlers = {
         LMswapItem = swapItem,
-        LMmarkAsDone = markAsDone
+        LMmarkAsDone = markAsDone,
+        LMresetSwapTables = resetSwapTables
     },
     engineHandlers = {
         onSave = saveState,
