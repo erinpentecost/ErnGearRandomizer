@@ -157,6 +157,12 @@ local function filter(record)
     if string.find(string.lower(record.id), ".*curse.*") ~= nil then
         return false
     end
+
+    -- Nordic armor sets from tamriel data seem to all have broken meshes.
+    if string.find(string.lower(record.id), "t_nor_.*") ~= nil then
+        return false
+    end
+
     if S.itemBan() ~= "" and string.find(string.lower(record.id), S.itemBan()) ~= nil then
         return false
     end
@@ -165,12 +171,22 @@ local function filter(record)
 end
 
 local function meshOk(record)
-    -- Use this function so we don't swap items for broken items.
-    exists = V.fileExists(record.model)
-    if not exists then
-        S.debugPrint("bad mesh for " .. record.id)
+    -- Check if path defined.
+    if not V.fileExists(record.model) then
+        S.debugPrint("Bad mesh " .. record.id .. " : missing file " .. record.model)
+        return false
     end
-    return exists
+    -- Try to load it.
+    -- Note: This doesn't actually find any errors!
+    --[[
+    fileHandle, errMsg = V.open(record.model)
+    if errMsg ~= nil then
+        S.debugPrint("Bad mesh " .. record.id .. " : failed to open " .. record.model)
+        return false
+    end
+    fileHandle:close()
+    ]]
+    return true
 end
 
 lastUpdateTime =  core.getRealTime() - 5
