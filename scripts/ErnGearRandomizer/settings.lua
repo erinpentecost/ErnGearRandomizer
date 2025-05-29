@@ -88,21 +88,22 @@ local function initSettings()
             },
             {
                 key = 'itemBan',
-                name = 'Banned Item Pattern',
-                description = 'Additional pattern for banned item IDs.',
+                name = 'itemBan_name',
+                description = 'itemBan_description',
                 default = 'indoril.*',
                 renderer = 'textLine',
             },
             {
                 key = 'classBan',
-                name = 'Banned Class Pattern',
-                description = 'Additional pattern for banned class IDs.',
+                name = 'classBan_name',
+                description = 'classBan_description',
                 default = '',
                 renderer = 'textLine',
             },
             {
                 key = "debugMode",
                 name = "debugMode_name",
+                description = "debugMode_description",
                 default = false,
                 renderer = "checkbox"
             }
@@ -112,9 +113,56 @@ local function initSettings()
     debugPrint("init settings done")
 end
 
+
+local function chance()
+    return settingsStore:get("chance")
+end
+
+local function clothes()
+    return settingsStore:get("clothes")
+end
+
+local function armor()
+    return settingsStore:get("armor")
+end
+
+local function weapons()
+    return settingsStore:get("weapons")
+end
+
+local function enchanted()
+    return settingsStore:get("enchanted")
+end
+
+local function extraRandom()
+    return settingsStore:get("extraRandom")
+end
+
+local function itemBan()
+    return settingsStore:get("itemBan")
+end
+
+local function classBan()
+    return settingsStore:get("classBan")
+end
+
+local function debugMode()
+    return settingsStore:get("debugMode")
+end
+
 return {
     initSettings = initSettings,
     settingsStore = settingsStore,
     MOD_NAME = MOD_NAME,
-    debugPrint = debugPrint
+    debugPrint = debugPrint,
+
+    chance = chance,
+    clothes = clothes,
+    armor = armor,
+    weapons = weapons,
+    enchanted = enchanted,
+    extraRandom = extraRandom,
+    itemBan = itemBan,
+    classBan = classBan,
+    debugMode = debugMode,
 }

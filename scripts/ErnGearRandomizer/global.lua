@@ -38,7 +38,7 @@ local function swapItem(data)
     actor = data.actor
     oldItem = data.oldItem
     newItemRecordID = data.newItemRecordID
-    S.debugPrint("npc " .. actor.id .. " swapping item " .. oldItem.id .. " to " .. newItemRecordID)
+    S.debugPrint("npc " .. actor.recordId .. " swapping " .. oldItem.recordId  .. " to " .. newItemRecordID)
     oldItem:remove()
     inventory = T.Actor.inventory(actor)
     newItemInstance = world.createObject(newItemRecordID)
@@ -50,7 +50,9 @@ local function markAsDone(data)
     actor = data.actor
     S.debugPrint("marking " .. actor.id .. " as done")
     -- mark swap as done
-    swapMarker:set(actor.id, true)
+    if not S.debugMode then
+        swapMarker:set(actor.id, true)
+    end
 end
 
 local function saveState()
