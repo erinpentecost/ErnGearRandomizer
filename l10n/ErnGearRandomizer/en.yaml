@@ -25,5 +25,5 @@ classBan_description: "Additional pattern for banned class IDs. Example: 'guard'
 extraRandom_name: "Extra Random"
 extraRandom_description: "Don't try to just replace items with similar items. This is not aesthetically pleasing and will disrupt the game economy."
 
-
-debugMode_name: "Print Debug Messages to the Console"
+debugMode_name: "Debug Mode"
+debugMode_description: "Print debug messages and disable persistency."

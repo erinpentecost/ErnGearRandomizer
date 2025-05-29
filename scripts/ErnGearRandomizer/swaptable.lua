@@ -24,34 +24,6 @@ local U = require("scripts.ErnGearRandomizer.uniques")
 
 local storage = require("openmw.storage")
 
-local function chance()
-    return S.settingsStore:get("chance")
-end
-
-local function clothes()
-    return S.settingsStore:get("clothes")
-end
-
-local function armor()
-    return S.settingsStore:get("armor")
-end
-
-local function weapons()
-    return S.settingsStore:get("weapons")
-end
-
-local function enchanted()
-    return S.settingsStore:get("enchanted")
-end
-
-local function extraRandom()
-    return S.settingsStore:get("extraRandom")
-end
-
-local function itemBan()
-    return S.settingsStore:get("itemBan")
-end
-
 local function lookupTable()
     return storage.globalSection(S.MOD_NAME .. "_swap_tables")
 end
@@ -75,9 +47,28 @@ local function quantize(num, size)
     return (size * math.floor(tonumber(num) / size))
 end
 
+local function enchantedFlag(record)
+    if record.enchant == nil then
+        return ""
+    else
+        return "m"
+    end
+end
+
+local function bucket(num)
+    -- Armor and weapon prices are really wacky, with lots of low-end armor
+    -- and fewer types of high-end armor that are extremely expensive.
+    if num <= 100 then
+        return quantize(num, 50)
+    else
+        -- This smushes high-end armors closer together.
+        return 100 + math.floor(math.log(num))
+    end
+end
+
 -- lookupArmorTableName returns the lookuptable containing similar armors.
 local function lookupArmorTableName(record)
-    if extraRandom() then
+    if S.extraRandom() then
         return S.MOD_NAME .. "a" .. record.type
     end
     -- include bucketed weight in the table name so we try to pair
@@ -92,29 +83,38 @@ local function lookupArmorTableName(record)
 
     -- https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_types.html##(Armor).TYPE
     return S.MOD_NAME ..
-        "a" ..
-            record.type ..
-                "e" .. quantize(record.enchantCapacity, 2) .. "w" .. weightBucket .. "c" .. quantize(record.value, 4000)
+        "a" .. record.type ..
+        "e" .. quantize(record.enchantCapacity, 2) ..
+        "w" .. weightBucket ..
+        "c" .. bucket(tonumber(record.value)) ..
+        enchantedFlag(record)
 end
 
 -- lookupClothingTableName returns the lookuptable containing similar clothing.
 local function lookupClothingTableName(record)
-    if extraRandom() then
+    if S.extraRandom() then
         return S.MOD_NAME .. "c" .. record.type
     end
     -- https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_types.html##(Clothing).TYPE
     return S.MOD_NAME ..
-        "c" .. record.type .. "e" .. quantize(record.enchantCapacity, 2) .. "c" .. quantize(record.value, 20)
+        "c" .. record.type ..
+        "e" .. quantize(record.enchantCapacity, 2) ..
+        "c" .. quantize(record.value, 20) ..
+        enchantedFlag(record)
 end
+
 
 -- lookupWeaponTableName returns the lookuptable containing similar weapons.
 local function lookupWeaponTableName(record)
-    if extraRandom() then
+    if S.extraRandom() then
         return S.MOD_NAME .. "w" .. record.type
     end
     -- https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_types.html##(Weapon).TYPE
     return S.MOD_NAME ..
-        "w" .. record.type .. "e" .. quantize(record.enchantCapacity, 2) .. "c" .. quantize(record.value, 10000)
+        "w" .. record.type ..
+        "e" .. quantize(record.enchantCapacity, 2) ..
+        "c" .. bucket(tonumber(record.value)) ..
+        enchantedFlag(record)
 end
 
 local function addToTable(tableKey, recordID)
@@ -136,7 +136,7 @@ local function filter(record)
     if U.uniqueID(record.id) == true then
         return false
     end
-    if enchanted() == false and record.enchant ~= nil then
+    if S.enchanted() == false and record.enchant ~= nil then
         return false
     end
     if string.find(string.lower(record.id), ".*fake.*") ~= nil then
@@ -157,7 +157,7 @@ local function filter(record)
     if string.find(string.lower(record.id), ".*curse.*") ~= nil then
         return false
     end
-    if itemBan() ~= "" and string.find(string.lower(record.id), itemBan()) ~= nil then
+    if S.itemBan() ~= "" and string.find(string.lower(record.id), S.itemBan()) ~= nil then
         return false
     end
 
@@ -166,7 +166,11 @@ end
 
 local function meshOk(record)
     -- Use this function so we don't swap items for broken items.
-    return V.fileExists(record.model)
+    exists = V.fileExists(record.model)
+    if not exists then
+        S.debugPrint("bad mesh for " .. record.id)
+    end
+    return exists
 end
 
 lastUpdateTime =  core.getRealTime() - 5
@@ -234,7 +238,7 @@ end
 -- returns nil if no replacement.
 function getArmorRecordID(armorItem)
     -- https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_core.html##(GameObject)
-    if armor() ~= true then
+    if S.armor() ~= true then
         S.debugPrint("armor swap disabled")
         return nil
     end
@@ -242,7 +246,7 @@ function getArmorRecordID(armorItem)
         S.debugPrint("armor filtered")
         return nil
     end
-    if chance() < math.random(0, 99) then
+    if S.chance() < math.random(0, 99) then
         S.debugPrint("die roll failed")
         return nil
     end
@@ -255,13 +259,13 @@ end
 -- returns nil if no replacement.
 function getClothingRecordID(clothingItem)
     -- https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_core.html##(GameObject)
-    if clothes() ~= true then
+    if S.clothes() ~= true then
         return nil
     end
     if filter(clothingItem) == false then
         return nil
     end
-    if chance() < math.random(0, 99) then
+    if S.chance() < math.random(0, 99) then
         return nil
     end
 
@@ -273,13 +277,13 @@ end
 -- returns nil if no replacement.
 function getWeaponRecordID(weaponItem)
     -- https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_core.html##(GameObject)
-    if weapons() ~= true then
+    if S.weapons() ~= true then
         return nil
     end
     if filter(weaponItem) == false then
         return nil
     end
-    if chance() < math.random(0, 99) then
+    if S.chance() < math.random(0, 99) then
         return nil
     end
 
