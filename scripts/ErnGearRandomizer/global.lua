@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ]]
 local S = require("scripts.ErnGearRandomizer.settings")
 local core = require("openmw.core")
+local async = require('openmw.async')
 local T = require("openmw.types")
 local world = require("openmw.world")
 local storage = require("openmw.storage")
@@ -34,21 +35,40 @@ swapTable.initTables()
 local swapMarker = storage.globalSection(S.MOD_NAME .. "SwapMarker")
 swapMarker:setLifeTime(storage.LIFE_TIME.GameSession)
 
-local function swapItem(data)
-    actor = data.actor
-    oldItem = data.oldItem
-    newItemRecordID = data.newItemRecordID
-    S.debugPrint("npc " .. actor.recordId .. " swapping " .. oldItem.recordId  .. " to " .. newItemRecordID)
-    oldItem:remove()
-    inventory = T.Actor.inventory(actor)
-    newItemInstance = world.createObject(newItemRecordID)
-    newItemInstance:moveInto(inventory)
-    core.sendGlobalEvent("UseItem", {object = newItemInstance, actor = actor, force = false})
+local function delete(data)
+    data:remove()
 end
 
-local function markAsDone(data)
+deleteCallback = async:registerTimerCallback("delete", delete)
+
+local function swapItems(data)
     actor = data.actor
-    S.debugPrint("marking " .. actor.id .. " as done")
+    oldItems = data.oldItems
+    newItemRecordIDs = data.newItemRecordIDs
+
+    mergedEquiplist = {}
+    inventory = T.Actor.inventory(actor)
+
+    for slot, oldItem in pairs(oldItems) do
+        if newItemRecordIDs[slot] ~= nil then
+            -- make a new item
+            newItemInstance = world.createObject(newItemRecordIDs[slot])
+            newItemInstance:moveInto(inventory)
+            -- use it
+            mergedEquiplist[slot] = newItemInstance
+            -- delete old item in follow-up frame.
+            -- this is to prevent flashing.
+            async:newGameTimer(0.001, deleteCallback, oldItem)
+            S.debugPrint("npc " .. actor.recordId .. ": " ..
+            oldItem.recordId  .. " -> " .. newItemRecordIDs[slot] )    
+        else
+            -- use the existing item
+            mergedEquiplist[slot] = oldItem
+        end
+    end
+
+    actor:sendEvent("LMequipHandler", mergedEquiplist)
+
     -- mark swap as done
     if not S.debugMode then
         swapMarker:set(actor.id, true)
@@ -70,7 +90,7 @@ end
 
 return {
     eventHandlers = {
-        LMswapItem = swapItem,
+        LMswapItems = swapItems,
         LMmarkAsDone = markAsDone,
         LMresetSwapTables = resetSwapTables
     },

@@ -90,7 +90,7 @@ local function initSettings()
                 key = 'itemBan',
                 name = 'itemBan_name',
                 description = 'itemBan_description',
-                default = 'indoril.*',
+                default = 'indoril.*,t_nor_.*',
                 renderer = 'textLine',
             },
             {
@@ -139,11 +139,11 @@ local function extraRandom()
 end
 
 local function itemBan()
-    return settingsStore:get("itemBan")
+    return string.gmatch(settingsStore:get("itemBan"), "[^,]+")
 end
 
 local function classBan()
-    return settingsStore:get("classBan")
+    return string.gmatch(settingsStore:get("classBan"), "[^,]+")
 end
 
 local function debugMode()

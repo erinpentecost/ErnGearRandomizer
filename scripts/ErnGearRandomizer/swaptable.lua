@@ -158,13 +158,11 @@ local function filter(record)
         return false
     end
 
-    -- Nordic armor sets from tamriel data seem to all have broken meshes.
-    if string.find(string.lower(record.id), "t_nor_.*") ~= nil then
-        return false
-    end
-
-    if S.itemBan() ~= "" and string.find(string.lower(record.id), S.itemBan()) ~= nil then
-        return false
+    for itemPattern in S.itemBan() do
+        if string.find(string.lower(record.id), itemPattern) ~= nil then
+            S.debugPrint("Banned item " .. record.id)
+            return false
+        end
     end
 
     return true
