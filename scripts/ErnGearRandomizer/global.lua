@@ -59,13 +59,12 @@ local function swapItems(data)
             -- delete old item in follow-up frame.
             -- this is to prevent flashing.
             async:newGameTimer(0.001, deleteCallback, oldItem)
-            
+            S.debugPrint("npc " .. actor.recordId .. ": " ..
+            oldItem.recordId  .. " -> " .. newItemRecordIDs[slot] )    
         else
             -- use the existing item
             mergedEquiplist[slot] = oldItem
         end
-        S.debugPrint("npc " .. actor.recordId .. ": " ..
-            oldItem.recordId  .. " -> " .. newItemRecordIDs[slot] )
     end
 
     actor:sendEvent("LMequipHandler", mergedEquiplist)

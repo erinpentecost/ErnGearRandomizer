@@ -24,6 +24,10 @@ local swapTable = require("scripts.ErnGearRandomizer.swaptable")
 
 local swapMarker = storage.globalSection(S.MOD_NAME .. "SwapMarker")
 
+if require("openmw.core").API_REVISION < 62 then
+    error("OpenMW 0.49 or newer is required!")
+end
+
 local function swapItems(npc)
     -- https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_types.html##(Actor)
     oldItems = T.Actor.getEquipment(npc)
