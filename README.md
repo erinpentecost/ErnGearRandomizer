@@ -34,9 +34,28 @@ You can change the settings for the mod in-game.
 * Enable/Disable weapon swaps.
 * Enable/Disable enchanted item swaps.
 * Enable/Disable similar-item swap restrictions.
-* Exclude classes of NPCs by [pattern](http://lua-users.org/wiki/PatternsTutorial).
-* Exclude additional items by [pattern](http://lua-users.org/wiki/PatternsTutorial).
+* Exclude classes of NPCs by a comma-separated list of [patterns](http://lua-users.org/wiki/PatternsTutorial).
+* Exclude additional items by a comma-separated list of [patterns](http://lua-users.org/wiki/PatternsTutorial).
 
+
+## FAQ
+
+### Why am I seeing a bunch of yellow triangles or missing body parts?
+Some other mod you installed came with items that have really busted meshes or items that only have meshes for one race or sex. You can fix this by adding the IDs of those bad items in the item ban list setting.
+
+### Does this conflict with mods that change guard armor?
+It will still work, but you may wish to disable changes to guards by this mod by adding `guard` to the class ban list setting.
+
+### Why do I keep hearing spell effects trigger when I enter a new area?
+This is because you enabled enchanted item swaps. When an NPC equips a magic item, it plays a short magical effect. That's what you're hearing (and seeing, if you can catch it in time). You'll only hear this the first time you enter an area.
+
+## I'm making a mod. How do I make sure my items aren't in the swap tables?
+Make sure items you don't want included have one of these strings in their ID:
+* `theater`
+* `unique`
+* `dummy`
+* `reward`
+* `curse`
 
 ## Contributing
 

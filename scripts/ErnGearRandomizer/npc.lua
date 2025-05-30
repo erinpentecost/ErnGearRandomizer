@@ -26,8 +26,10 @@ local swapMarker = storage.globalSection(S.MOD_NAME .. "SwapMarker")
 
 local function swapItems(npc)
     -- https://openmw.readthedocs.io/en/latest/reference/lua-scripting/openmw_types.html##(Actor)
-    equipmentSlotToItem = T.Actor.getEquipment(npc)
-    for slot, oldItem in pairs(equipmentSlotToItem) do
+    oldItems = T.Actor.getEquipment(npc)
+    newItemRecordIDs = {}
+
+    for slot, oldItem in pairs(oldItems) do
         if oldItem ~= nil then
             newSwapRecord = nil
             if T.Armor.objectIsInstance(oldItem) then
@@ -41,12 +43,20 @@ local function swapItems(npc)
             end
 
             if newSwapRecord then
-                core.sendGlobalEvent("LMswapItem", {actor = npc, oldItem = oldItem, newItemRecordID = newSwapRecord})
+                newItemRecordIDs[slot] = newSwapRecord
             end
         end
     end
-    -- mark swap as done
-    core.sendGlobalEvent("LMmarkAsDone", {actor = npc})
+
+    core.sendGlobalEvent("LMswapItems", {
+        actor = npc,
+        oldItems = oldItems, 
+        newItemRecordIDs = newItemRecordIDs,
+    })
+end
+
+local function equipHandler(data)
+    T.Actor.setEquipment(self, data)
 end
 
 local function onActive()
@@ -84,15 +94,20 @@ local function onActive()
         S.debugPrint("npc record " .. record.id .. " is essential, won't swap")
         return
     end
-    if S.classBan() ~= "" and string.find(string.lower(record.class), S.classBan()) ~= nil then
-        S.debugPrint("npc record " .. record.id .. " has a banned class " .. record.class)
-        return false
+    for classPattern in S.classBan() do
+        if string.find(string.lower(record.class), classPattern) ~= nil then
+            S.debugPrint("npc record " .. record.id .. " has a banned class " .. record.class)
+            return false
+        end
     end
 
     swapItems(self)
 end
 
 return {
+    eventHandlers = {
+        LMequipHandler = equipHandler
+    },
     engineHandlers = {
         onActive = onActive
     }

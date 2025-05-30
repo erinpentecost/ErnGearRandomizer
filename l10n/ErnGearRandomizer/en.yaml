@@ -15,12 +15,11 @@ weapons_name: "Randomize Weapons"
 enchanted_name: "Randomize Enchanted Items"
 enchanted_description: "Only normal items are eligible unless you enable this."
 
+itemBan_name: "Banned Item Patterns"
+itemBan_description: "Comma-separated list of item ID patterns to not swap. Example: 'indoril.*'."
 
-itemBan_name: "Banned Item Pattern"
-itemBan_description: "Additional pattern for banned item IDs. Example: 'indoril.*'."
-
-classBan_name: "Banned Class Pattern"
-classBan_description: "Additional pattern for banned class IDs. Example: 'guard'."
+classBan_name: "Banned Class Patterns"
+classBan_description: "Comma-separated list of NPC class ID patterns to not swap. Example: 'guard'."
 
 extraRandom_name: "Extra Random"
 extraRandom_description: "Don't try to just replace items with similar items. This is not aesthetically pleasing and will disrupt the game economy."
