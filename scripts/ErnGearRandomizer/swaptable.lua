@@ -43,8 +43,8 @@ armorWeightSplit = {
     [T.Armor.TYPE.Shield] = 9
 }
 
-local function quantize(num, size)
-    return (size * math.floor(tonumber(num) / size))
+local function quantize(num, width)
+    return (width * math.floor(tonumber(num) / width))
 end
 
 local function enchantedFlag(record)
@@ -232,19 +232,19 @@ local function initTables()
 end
 
 function pickNewRecordFromTable(lookupKey)
-    size = lookupTable():get("COUNT" .. lookupKey)
-    if size == nil then
+    tableCount = lookupTable():get("COUNT" .. lookupKey)
+    if tableCount == nil then
         -- we shouldn't get here unless settings changed or
         -- new item records were created procedurally.
         S.debugPrint("bad table " .. lookupKey)
         return nil
     end
-    if size <= 1 then
+    if tableCount <= 1 then
         S.debugPrint("small table " .. lookupKey)
         return nil
     end
 
-    randIndex = math.random(1, size)
+    randIndex = math.random(1, tableCount)
     return lookupTable():get(lookupKey)[randIndex]
 end
 

@@ -276,7 +276,10 @@ local uniqueIDs =
         "bm_ring_view",
         "mantle of woe",
         "BM_Nordic01_Robe_whitewalk",
-        "light_com_lantern_bm_unique"
+        "light_com_lantern_bm_unique",
+        -- also ignore slave bracers
+        "slave_bracer_left",
+        "slave_bracer_right"
     }
 )
 
