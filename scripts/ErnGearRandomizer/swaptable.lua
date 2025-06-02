@@ -55,11 +55,11 @@ local function enchantedFlag(record)
     end
 end
 
-local function bucket(num)
+local function bucket(num, smallDiv)
     -- Armor and weapon prices are really wacky, with lots of low-end armor
     -- and fewer types of high-end armor that are extremely expensive.
     if num <= 100 then
-        return quantize(num, 50)
+        return quantize(num, smallDiv)
     else
         -- This smushes high-end armors closer together.
         return 100 + math.floor(math.log(num))
@@ -86,7 +86,7 @@ local function lookupArmorTableName(record)
         "a" .. record.type ..
         "e" .. quantize(record.enchantCapacity, 2) ..
         "w" .. weightBucket ..
-        "c" .. bucket(tonumber(record.value)) ..
+        "c" .. bucket(tonumber(record.value), 50) ..
         enchantedFlag(record)
 end
 
@@ -99,7 +99,7 @@ local function lookupClothingTableName(record)
     return S.MOD_NAME ..
         "c" .. record.type ..
         "e" .. quantize(record.enchantCapacity, 2) ..
-        "c" .. quantize(record.value, 20) ..
+        "c" .. bucket(tonumber(record.value), 20) ..
         enchantedFlag(record)
 end
 
@@ -113,7 +113,7 @@ local function lookupWeaponTableName(record)
     return S.MOD_NAME ..
         "w" .. record.type ..
         "e" .. quantize(record.enchantCapacity, 2) ..
-        "c" .. bucket(tonumber(record.value)) ..
+        "c" .. bucket(tonumber(record.value), 50) ..
         enchantedFlag(record)
 end
 
